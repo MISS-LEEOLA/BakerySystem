@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Lindiwe's Bakery Management System | Stock, Sales & Receipts</title>
+
+    <meta name="description"
+          content="Lindiwe Kapi's Bakery Management System helps manage bakery stock, customer information, sales records, receipts, banking records and low-stock alerts.">
+
+    <meta name="keywords"
+          content="Bakery Management System, Bakery Stock Management, Bakery Sales Records, Customer Management, Receipt Management, Banking Records, Low Stock Alerts, Lindiwe Kapi">
+
+    <meta name="author" content="Lindiwe Kapi">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#b19cd9">
+
+    <link rel="canonical" href="https://www.example.com/">
+
+    <meta property="og:title"
+          content="Lindiwe's Bakery Management System">
+
+    <meta property="og:description"
+          content="Manage bakery customers, stock, sales, receipts and payment records in one place.">
+
+    <meta property="og:type" content="website">
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Custom color theme overrides: Lilac, Silver, Dusty Pink, Light Yellow + Slideshow Styles -->
+    <style>
+        :root {
+            --lilac: #b19cd9;
+            --lilac-dark: #8a73b5;
+            --silver: #c0c0c0;
+            --silver-light: #e8e8e8;
+            --dusty-pink: #d8a4b1;
+            --light-yellow: #fdfd96;
+            --light-yellow-bg: #fffef0;
+        }
+
+        body {
+            background-color: var(--silver-light);
+            color: #333333;
+        }
+
+        .site-header {
+            background-color: var(--lilac);
+            border-bottom: 1px solid var(--silver);
+        }
+
+        .logo span {
+            color: var(--dusty-pink);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--light-yellow-bg) 0%, var(--silver-light) 100%);
+            padding: 4rem 0;
+        }
+
+        .hero-container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .hero-content {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        /* Slideshow Styling */
+        .hero-slideshow {
+            flex: 1;
+            min-width: 280px;
+            max-width: 500px;
+            height: 350px;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            background-color: #fff;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            object-fit: cover;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .eyebrow {
+            color: var(--lilac-dark);
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: var(--lilac);
+            color: #fff;
+            border: 1px solid var(--lilac-dark);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--lilac-dark);
+        }
+
+        .btn-outline {
+            border-color: var(--silver);
+            color: #333;
+        }
+
+        .stat-card, .feature-card {
+            background-color: #ffffff;
+            border-top: 4px solid var(--dusty-pink);
+            box-shadow: 0 2px 5px rgba(192, 192, 192, 0.3);
+        }
+
+        .section-beige, .section-beige table {
+            background-color: var(--light-yellow-bg);
+        }
+
+        .notice {
+            background-color: var(--light-yellow);
+            border-left: 4px solid var(--dusty-pink);
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background: #ffffff;
+        }
+
+        th {
+            background-color: var(--lilac);
+            color: white;
+            border-bottom: 2px solid var(--silver);
+        }
+
+        td {
+            border-bottom: 1px solid var(--silver-light);
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--silver-light);
+        }
+
+        .site-footer {
+            background-color: var(--lilac-dark);
+            color: #ffffff;
+            border-top: 2px solid var(--silver);
+        }
+
+        .site-footer a {
+            color: var(--light-yellow);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <nav class="navbar container" aria-label="Main navigation">
+
+            <a href="#home" class="logo">
+                Lindiwe's <span>Bakery</span>
+            </a>
+
+            <button
+                class="menu-toggle"
+                id="menuToggle"
+                aria-label="Open navigation menu"
+                aria-expanded="false"
+                aria-controls="navLinks">
+                ☰
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#customers">Customers</a></li>
+                <li><a href="#stock">Stock</a></li>
+                <li><a href="#sales">Sales</a></li>
+                <li><a href="#receipts">Receipts</a></li>
+                <li><a href="#banking">Banking</a></li>
+            </ul>
+
+        </nav>
+    </header>
+
+    <main>
+
+        <!-- Hero Section with Slideshow -->
+        <section class="hero" id="home">
+            <div class="container hero-container">
+
+                <div class="hero-content">
+                    <p class="eyebrow">BAKERY MANAGEMENT MADE SIMPLE</p>
+
+                    <h1>
+                        Freshly Baked,
+                        <span>Smartly Managed.</span>
+                    </h1>
+
+                    <p class="hero-description">
+                        Manage your bakery with confidence.
+                        Capture customer information, track stock,
+                        record sales, generate receipts and monitor
+                        payments from one convenient system.
+                    </p>
+
+                    <div class="hero-buttons">
+                        <a href="#dashboard" class="btn btn-primary">
+                            Open Dashboard
+                        </a>
+
+                        <a href="#features" class="btn btn-outline">
+                            Explore Features
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Sliding Images Container -->
+                <div class="hero-slideshow" aria-label="Bakery and owner highlight slideshow">
+                    <img src="lee.jpg" class="slide active" alt="Lindiwe Kapi relaxing by the coast">
+                    <img src="2026.jpeg" class="slide" alt="Lindiwe Kapi listening to music">
+                    <img src="download.webp" class="slide" alt="Baking preparation with ingredients and tools">
+                    <img src="OIP.webp" class="slide" alt="Freshly prepared muffin batter in baking tray">
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Dashboard -->
+        <section class="section dashboard-section" id="dashboard">
+
+            <div class="container">
+
+                <div class="section-heading">
+                    <p class="eyebrow">YOUR BUSINESS AT A GLANCE</p>
+                    <h2>Bakery Dashboard</h2>
+                    <p>
+                        Monitor your bakery's daily activities
+                        and business performance.
+                    </p>
+                </div>
+
+                <div class="stats-grid">
+
+                    <article class="stat-card">
+                        <span>Total Products</span>
+                        <h3 id="totalProducts">0</h3>
+                    </article>
+
+                    <article class="stat-card">
+                        <span>Customers</span>
+                        <h3 id="totalCustomers">0</h3>
+                    </article>
+
+                    <article class="stat-card">
+                        <span>Total Sales</span>
+                        <h3 id="totalSales">R0.00</h3>
+                    </article>
+
+                    <article class="stat-card">
+                        <span>Low Stock Items</span>
+                        <h3 id="lowStockCount">0</h3>
+                    </article>
+
+                </div>
+
+                <div class="notice" id="lowStockNotice" role="status">
+                    Your stock alerts will appear here.
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Features -->
+        <section class="section" id="features">
+
+            <div class="container">
+
+                <div class="section-heading">
+                    <p class="eyebrow">PROPOSED SOLUTION</p>
+                    <h2>Everything Your Bakery Needs</h2>
+                    <p>
+                        A simple system designed to improve
+                        accuracy, organisation and efficiency.
+                    </p>
+                </div>
+
+                <div class="feature-grid">
+
+                    <article class="feature-card">
+                        <span class="feature-icon" aria-hidden="true">01</span>
+                        <h3>Stock Management</h3>
+                        <p>
+                            Add products, update quantities,
+                            monitor inventory and identify
+                            products that need restocking.
+                        </p>
+                    </article>
+
+                    <article class="feature-card">
+                        <span class="feature-icon" aria-hidden="true">02</span>
+                        <h3>Sales Tracking</h3>
+                        <p>
+                            Record transactions, calculate totals
+                            and review previous sales.
+                        </p>
+                    </article>
+
+                    <article class="feature-card">
+                        <span class="feature-icon" aria-hidden="true">03</span>
+                        <h3>Customer Information</h3>
+                        <p>
+                            Capture and manage customer names,
+                            telephone numbers and email addresses.
+                        </p>
+                    </article>
+
+                    <article class="feature-card">
+                        <span class="feature-icon" aria-hidden="true">04</span>
+                        <h3>Receipts and Dates</h3>
+                        <p>
+                            Generate printable receipts with
+                            transaction numbers, dates and totals.
+                        </p>
+                    </article>
+
+                    <article class="feature-card">
+                        <span class="feature-icon" aria-hidden="true">05</span>
+                        <h3>Banking Records</h3>
+                        <p>
+                            Track payment methods, transaction
+                            references and payment statuses.
+                        </p>
+                    </article>
+
+                    <article class="feature-card">
+                        <span class="feature-icon" aria-hidden="true">06</span>
+                        <h3>Low-Stock Warnings</h3>
+                        <p>
+                            Receive alerts when products or
+                            ingredients reach their minimum
+                            stock levels.
+                        </p>
+                    </article>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Customer Management -->
+        <section class="section section-beige" id="customers">
+
+            <div class="container">
+
+                <div class="section-heading">
+                    <p class="eyebrow">CUSTOMER MANAGEMENT</p>
+                    <h2>Capture Customer Information</h2>
+                    <p>
+                        Keep your customer details organised
+                        for orders and sales.
+                    </p>
+                </div>
+
+                <form id="customerForm" class="management-form">
+
+                    <div class="form-group">
+                        <label for="customerName">Full Name</label>
+                        <input
+                            type="text"
+                            id="customerName"
+                            name="customerName"
+                            autocomplete="name"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customerPhone">Phone Number</label>
+                        <input
+                            type="tel"
+                            id="customerPhone"
+                            name="customerPhone"
+                            autocomplete="tel"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customerEmail">Email Address</label>
+                        <input
+                            type="email"
+                            id="customerEmail"
+                            name="customerEmail"
+                            autocomplete="email">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Save Customer
+                    </button>
+
+                </form>
+
+                <div class="table-wrapper">
+
+                    <table>
+                        <caption>Registered Bakery Customers</caption>
+
+                        <thead>
+                            <tr>
+                                <th scope="col">Customer</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Email</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="customerTableBody">
+                            <tr>
+                                <td colspan="3">
+                                    No customers registered yet.
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Stock Management -->
+        <section class="section" id="stock">
+
+            <div class="container">
+
+                <div class="section-heading">
+                    <p class="eyebrow">INVENTORY CONTROL</p>
+                    <h2>Add and Manage Stock</h2>
+                    <p>
+                        Track bakery products and ingredients
+                        while keeping an eye on low stock.
+                    </p>
+                </div>
+
+                <form id="stockForm" class="management-form">
+
+                    <div class="form-group">
+                        <label for="productName">Product Name</label>
+                        <input
+                            type="text"
+                            id="productName"
+                            name="productName"
+                            placeholder="e.g. Flour"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productQuantity">Quantity</label>
+                        <input
+                            type="number"
+                            id="productQuantity"
+                            name="productQuantity"
+                            min="0"
+                            step="1"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productPrice">Unit Price (R)</label>
+                        <input
+                            type="number"
+                            id="productPrice"
+                            name="productPrice"
+                            min="0"
+                            step="0.01"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="minimumStock">Minimum Stock</label>
+                        <input
+                            type="number"
+                            id="minimumStock"
+                            name="minimumStock"
+                            min="0"
+                            step="1"
+                            value="5"
+                            required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Add Stock
+                    </button>
+
+                </form>
+
+                <div class="table-wrapper">
+
+                    <table>
+                        <caption>Bakery Stock Records</caption>
+
+                        <thead>
+                            <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Unit Price</th>
+                                <th scope="col">Stock Status</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="stockTableBody">
+                            <tr>
+                                <td colspan="5">No stock recorded yet.</td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Sales -->
+        <section class="section section-beige" id="sales">
+
+            <div class="container">
+
+                <div class="section-heading">
+                    <p class="eyebrow">SALES MANAGEMENT</p>
+                    <h2>Record a Sale</h2>
+                    <p>
+                        Record each sale and automatically update
+                        the available product quantity.
+                    </p>
+                </div>
+
+                <form id="salesForm" class="management-form">
+
+                    <div class="form-group">
+                        <label for="saleCustomer">Customer</label>
+                        <select id="saleCustomer" required>
+                            <option value="">Select customer</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="saleProduct">Product</label>
+                        <select id="saleProduct" required>
+                            <option value="">Select product</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="saleQuantity">Quantity Sold</label>
+                        <input
+                            type="number"
+                            id="saleQuantity"
+                            min="1"
+                            step="1"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="paymentMethod">Payment Method</label>
+                        <select id="paymentMethod" required>
+                            <option value="Cash">Cash</option>
+                            <option value="Card">Card</option>
+                            <option value="EFT">EFT</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Record Sale
+                    </button>
+
+                </form>
+
+                <div class="table-wrapper">
+
+                    <table>
+                        <caption>Sales History</caption>
+
+                        <thead>
+                            <tr>
+                                <th scope="col">Receipt No.</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Customer</th>
+                                <th scope="col">Product</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Total</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="salesTableBody">
+                            <tr>
+                                <td colspan="7">No sales recorded yet.</td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Receipts -->
+        <section class="section" id="receipts">
+
+            <div class="container">
+
+                <div class="section-heading">
+                    <p class="eyebrow">TRANSACTION DOCUMENTATION</p>
+                    <h2>Receipts and Sales Records</h2>
+                    <p>
+                        View your recorded transactions and
+                        print receipts for completed sales.
+                    </p>
+                </div>
+
+                <div id="receiptOutput" class="receipt-output"
+                     aria-live="polite">
+                    <p>Your generated receipt will appear here.</p>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Banking -->
+        <section class="section section-beige" id="banking">
+
+            <div class="container">
+
+                <div class="section-heading">
+                    <p class="eyebrow">PAYMENT MANAGEMENT</p>
+                    <h2>Banking and Payment Records</h2>
+                    <p>
+                        Track payment methods, transaction references
+                        and payment statuses without storing sensitive
+                        banking credentials.
+                    </p>
+                </div>
+
+                <form id="bankingForm" class="management-form">
+
+                    <div class="form-group">
+                        <label for="bankReceipt">Receipt Number</label>
+                        <select id="bankReceipt" required>
+                            <option value="">Select a sale</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bankReference">
+                            Transaction Reference
+                        </label>
+                        <input
+                            type="text"
+                            id="bankReference"
+                            maxlength="100"
+                            placeholder="Optional reference">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bankStatus">Payment Status</label>
+                        <select id="bankStatus" required>
+                            <option value="Paid">Paid</option>
+                            <option value="Pending">Pending</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Save Payment Record
+                    </button>
+
+                </form>
+
+                <div class="table-wrapper">
+
+                    <table>
+                        <caption>Banking and Payment History</caption>
+
+                        <thead>
+                            <tr>
+                                <th scope="col">Receipt</th>
+                                <th scope="col">Reference</th>
+                                <th scope="col">Payment Method</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="bankingTableBody">
+                            <tr>
+                                <td colspan="5">
+                                    No payment records yet.
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+
+        <div class="container footer-content">
+
+            <div>
+                <h2>Lindiwe's Bakery</h2>
+
+                <p>
+                    A smarter way to manage bakery stock,
+                    customers, sales and payments.
+                </p>
+            </div>
+
+            <div>
+                <h3>Quick Links</h3>
+                <a href="#customers">Customers</a>
+                <a href="#stock">Stock Management</a>
+                <a href="#sales">Sales Records</a>
+                <a href="#banking">Banking</a>
+            </div>
+
+            <div>
+                <h3>Developer</h3>
+                <p>Lindiwe Kapi</p>
+                <p>Bakery Management System</p>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>
+                &copy; <span id="currentYear"></span>
+                Lindiwe Kapi. All rights reserved.
+            </p>
+        </div>
+
+    </footer>
+
+    <!-- Slideshow and Dynamic App JavaScript -->
+    <script>
+        // Image Slideshow Logic
+        document.addEventListener("DOMContentLoaded", function () {
+            const slides = document.querySelectorAll(".hero-slideshow .slide");
+            let currentSlide = 0;
+
+            if (slides.length > 0) {
+                setInterval(() => {
+                    slides[currentSlide].classList.remove("active");
+                    currentSlide = (currentSlide + 1) % slides.length;
+                    slides[currentSlide].classList.add("active");
+                }, 4000); // Changes image every 4 seconds
+            }
+
+            // Set current year in footer automatically
+            const yearSpan = document.getElementById("currentYear");
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
+            }
+        });
+    </script>
+    <script src="script.js" defer></script>
+</body>
+</html>
